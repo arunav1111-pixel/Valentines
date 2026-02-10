@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<style>
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #ffd6e5;
+  font-family: "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+.page {
+  height: 100vh;
+  display: none;
+}
+
+
+
+/* FIRST PAGE */
+#firstPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* BUTTONS */
+button {
+  padding: 15px 30px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin: 15px;
+}
+
+#yesBtn {
+  background: hotpink;
+  color: white;
+}
+
+#noBtn {
+  position: absolute;
+  background: white;
+}
+
+/* SECOND PAGE */
+#secondPage {
+  display: none;
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+
+/* COLLAGE GRID */
+.collage-wrapper {
+  position: relative;
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(0, 1fr)); /* 3 rows */
+
+  gap: 10px;
+  width: 100%;
+  height: 100vh;
+
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+
+
+
+
+
+
+
+.collage-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.center-text {
+  position: absolute;   /* THIS IS CRITICAL */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(255, 214, 229, 0.85);
+  padding: 20px 30px;
+  border-radius: 20px;
+  line-height: 1.8;
+  font-size: 20px;
+}
+
+
+
+/* HEARTS */
+.heart {
+  position: fixed;
+  color: red;
+  pointer-events: none;
+  animation: floatUp linear infinite;
+  z-index: 99999;
+}
+
+
+
+
+@keyframes floatUp {
+  from {
+    top: 100vh;
+    opacity: 1;
+  }
+  to {
+    top: -50px;
+    opacity: 0;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- FIRST PAGE -->
+<div id="firstPage" class="page">
+  <h1>Will you be my Valentine? ❤️</h1>
+  <button id="yesBtn" onclick="goToSecondPage()">Yes 💖</button>
+  <button id="noBtn" onmouseover="moveNo()">No 💔</button>
+</div>
+
+<!-- SECOND PAGE -->
+<div id="secondPage" class="page">
+  <div class="collage-wrapper">
+
+<img src="gif1.gif">
+<img src="gif2.gif">
+<img src="gif3.gif">
+<img src="gif4.gif">
+<img src="gif5.gif">
+<img src="gif7.gif">
+<img src="gif8.gif">
+<img src="gif9.gif">
+<img src="gif10.gif">
+<img src="gif12.gif">
+<img src="gif15.gif">
+<img src="gif16.gif">
+
+
+<div class="center-text">
+  <h2>KINKY PINKYYYYY ❤️</h2>
+  <h3>Yayyyyy ❤️</h3>
+  <p>
+    kuchu puchuuuu<br>
+    Phassss gaya re obama! hehe 🌹
+  </p>
+
+<button id="muteBtn" onclick="toggleMusic()" style="
+  margin-top:10px;
+  padding:6px 12px;
+  border:none;
+  border-radius:12px;
+  background: rgba(255,105,180,0.25);
+  color: #b0005f;
+  font-size:13px;
+  cursor:pointer;
+">
+  🔊 Sound
+</button>
+
+</div>
+
+
+
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="photograph.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function moveNo() {
+  const btn = document.getElementById("noBtn");
+  const btnWidth = btn.offsetWidth;
+  const btnHeight = btn.offsetHeight;
+
+  const maxX = window.innerWidth - btnWidth - 10;  // 10px margin from edges
+  const maxY = window.innerHeight - btnHeight - 10;
+
+  btn.style.left = Math.random() * maxX + "px";
+  btn.style.top = Math.random() * maxY + "px";
+}
+
+
+function goToSecondPage() {
+  document.getElementById("firstPage").style.display = "none";
+  document.getElementById("secondPage").style.display = "block";
+
+  const music = document.getElementById("bgMusic");
+  music.volume = 0;
+  music.play();
+
+  let vol = 0;
+  let fadeIn = setInterval(() => {
+    if (vol < 0.4) {
+      vol += 0.02;
+      music.volume = vol;
+    } else {
+      clearInterval(fadeIn);
+    }
+  }, 200);
+
+  setTimeout(startHearts, 300);
+}
+
+
+
+
+function startHearts() {
+  for (let i = 0; i < 45; i++) {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+
+    if (Math.random() < 0.5) {
+      // LEFT side (extended toward center)
+      heart.style.left = Math.random() * 30 + "vw";   // 0 → 30vw
+    } else {
+      // RIGHT side (extended toward center)
+      heart.style.left = 70 + Math.random() * 30 + "vw"; // 70 → 100vw
+    }
+
+    heart.style.fontSize = (Math.random() * 10 + 16) + "px";
+    heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+    heart.style.top = "100vh";
+
+    document.body.appendChild(heart);
+  }
+}
+
+let isMuted = false;
+
+function toggleMusic() {
+  const music = document.getElementById("bgMusic");
+  const btn = document.getElementById("muteBtn");
+
+  if (!isMuted) {
+    fadeOutMusic();
+    btn.innerHTML = "🔈 Unmute";
+  } else {
+    fadeInMusic();
+    btn.innerHTML = "🔊 Mute";
+  }
+
+  isMuted = !isMuted;
+}
+
+function fadeOutMusic() {
+  const music = document.getElementById("bgMusic");
+  let vol = music.volume;
+
+  let fadeOut = setInterval(() => {
+    if (vol > 0.05) {
+      vol -= 0.02;
+      music.volume = vol;
+    } else {
+      music.volume = 0;
+      music.pause();
+      clearInterval(fadeOut);
+    }
+  }, 200);
+}
+
+function fadeInMusic() {
+  const music = document.getElementById("bgMusic");
+  music.play();
+  let vol = 0;
+  music.volume = 0;
+
+  let fadeIn = setInterval(() => {
+    if (vol < 0.4) {
+      vol += 0.02;
+      music.volume = vol;
+    } else {
+      clearInterval(fadeIn);
+    }
+  }, 200);
+}
+
+
+
+</script>
+
+</body>
+</html>
